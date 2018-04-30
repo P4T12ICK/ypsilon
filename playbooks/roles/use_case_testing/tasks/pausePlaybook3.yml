@@ -19,6 +19,6 @@
 # This playbook pause the execution
 
 - name: Wait until malware analysis is finished
-  pause: seconds=60
+  pause: seconds=120
 
 ...
