@@ -1,0 +1,21 @@
+title: Test
+status: experimental
+description: Test
+author: Patrick Bareiss
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 
+            - 111
+    condition: selection | count(EventID) by ComputerName > 0
+fields:
+    - EventID
+    - ComputerName
+    - User
+    - Image
+    - TargetFilename
+falsepositives:
+    - valid company software
+
