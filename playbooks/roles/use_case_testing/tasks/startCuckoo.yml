@@ -1,0 +1,39 @@
+# Copyright 2018 Patrick Bareiss
+
+# This file is part of Ypsilon.
+
+# Ypsilon is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Ypsilon is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Ypsilon.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+# This playbook starts cuckoo.
+
+- name: Start cuckoo
+  shell: 'supervisorctl start cuckoo:'
+  args:
+    chdir: ~/.cuckoo/
+
+- name: Debug check cuckoo status
+  shell: 'supervisorctl status cuckoo:'
+  args:
+    chdir: ~/.cuckoo/
+  register: status_cuckoo
+  when: log_level == 'debug'
+
+- name: Debug check cuckoo status
+  debug:
+    var: status_cuckoo.stdout
+  when: log_level == 'debug'
+
+
+...

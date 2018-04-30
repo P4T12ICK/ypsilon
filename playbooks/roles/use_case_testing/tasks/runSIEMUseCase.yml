@@ -1,0 +1,92 @@
+# Copyright 2018 Patrick Bareiss
+
+# This file is part of Ypsilon.
+
+# Ypsilon is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Ypsilon is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Ypsilon.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+# This playbook runs a SIEM Use Case
+
+- name: Load sigma_rule into var
+  include_vars:
+    file: '{{ sigma_rule_path }}'
+    name: rule
+
+- name: Debug required fields for search
+  debug:
+    msg: '{% for item in rule["fields"] %}&rf={{item}}{% endfor %}'
+  when:
+    - log_level == 'debug'
+    - sigma_target == 'splunk'
+
+- name: Run SIEM Use Case in Splunk with REST API
+  uri:
+    url: 'https://{{ target_ip_address }}:8089/services/search/jobs'
+    method: POST
+    body: 'search=search {{ SIEM_search.stdout }}{% for item in rule["fields"] %}&rf={{item}}{% endfor %}'
+    return_content: yes
+    validate_certs: no
+    status_code: 201
+    headers:
+      Content-Type: "application/x-www-form-urlencoded"
+  register: SID_output
+  when: sigma_target == 'splunk' 
+
+- name: Debug SIEM use case reponse 
+  debug:
+    msg: "{{ SID_output }}"
+  when:
+    - log_level == 'debug'
+    - sigma_target == 'splunk'
+
+- name: Wait for the splunk search to finish
+  pause: seconds=30
+
+- name: Return results of SIEM Use Case in Splunk with REST API
+  uri:
+    url: "{{ SID_output.location }}/results/"
+    method: GET
+    body: 'output_mode=json{% for item in rule["fields"] %}&f={{item}}{% endfor %}'
+    return_content: yes
+    validate_certs: no
+    status_code: 200
+    headers:
+      Content-Type: "application/x-www-form-urlencoded"
+  register: SIEM_output
+  when: sigma_target == 'splunk'
+
+- name: Debug SIEM use case reponse 
+  debug:
+    msg: "{{ SIEM_output }}"
+  when:
+    - log_level == 'debug'
+    - sigma_target == 'splunk'
+
+- name: Store result in log file
+  copy:
+    content: '{{ SIEM_output.content }}'
+    dest: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/{{ malware }}/SIEM_results.log'
+  when: 
+    - SIEM_output.content_length != "0"
+    - sigma_target == 'splunk'
+
+- name: Store result in log file
+  copy:
+    content: 'no results'
+    dest: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/{{ malware }}/SIEM_results.log'
+  when: 
+    - SIEM_output.content_length == "0"
+    - sigma_target == 'splunk'
+
+...

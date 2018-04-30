@@ -1,0 +1,25 @@
+title: Registry Run Keys
+status: experimental
+description: Detetcs when a registry run key is added.
+author: Patrick Bareiss
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 
+            - 12
+            - 13
+            - 14
+        TargetObject: '*\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\*'
+    condition: selection
+fields:
+    - Image
+    - TargetObject
+    - Details 
+    - ComputerName
+    - User
+    - EventCode
+falsepositives:
+    - valid company software
+

@@ -1,0 +1,86 @@
+# Copyright 2018 Patrick Bareiss
+
+# This file is part of Ypsilon.
+
+# Ypsilon is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Ypsilon is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Ypsilon.  If not, see <http://www.gnu.org/licenses/>.
+
+---
+# This playbook creates the report
+
+- name: Copy template tex file
+  copy:
+    src: '{{ ypsilon_path }}reporting/template.tex'
+    dest: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    remote_src: yes
+    owner: '{{ ansible_user }}'
+    group: '{{ ansible_user }}'
+
+- name: Search and Replace SIEM
+  replace:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    regexp: '\[\[SIEM\]\]'
+    replace: '{{ sigma_target }}'
+    backup: no
+
+- name: Search and Replace title
+  replace:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    regexp: '\[\[title\]\]'
+    replace: '{{ rule["title"] }}'
+    backup: no
+
+- name: Search and Replace status
+  replace:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    regexp: '\[\[status\]\]'
+    replace: '{{ rule["status"] }}'
+    backup: no
+
+- name: Search and Replace description
+  replace:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    regexp: '\[\[description\]\]'
+    replace: '{{ rule["description"] }}'
+    backup: no
+
+- name: Search and Replace author
+  replace:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    regexp: '\[\[author\]\]'
+    replace: '{{ rule["author"] }}'
+    backup: no
+
+- name: Search and Replace search
+  replace:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    regexp: '\[\[search\]\]'
+    replace: '{{ SIEM_search.stdout }}'
+    backup: no
+
+- name: convert tex file to pdf
+  shell:
+    cmd: 'pdflatex {{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    chdir: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}'
+  register: result_latex
+
+- name: Debug output conversion
+  debug:
+    msg: '{{ result_latex }}'
+  when:
+    - log_level == 'debug'
+
+- name: Wait for the generation of the report
+  pause: seconds=10
+
+...

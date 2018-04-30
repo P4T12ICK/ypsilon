@@ -1,0 +1,8 @@
+logsources:
+  windows-sysmon:
+    product: windows
+    service: sysmon
+    conditions:
+      source: 'WinEventLog:Microsoft-Windows-Sysmon/Operational'
+fieldmappings:
+    EventID: EventCode
