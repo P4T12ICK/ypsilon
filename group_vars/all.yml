@@ -26,10 +26,8 @@ vm_name: 'splunk'
 snapshot: 'splunk_prepared'
 
 # malware
-malware_path: '/home/patrick/Downloads/ytisf-theZoo-75c1641/malwares/Binaries/Win32.Lephic/'
-malware_name: 'Win32.Lephic'
-malware_array: ['Win32.Lephic']
-#malware_array: ['Win32.Lephic','Win32.Alina.3.4.B']
+malware_path: '/home/patrick/Downloads/malware/'
+malware_array: ['Win32.Lephic','Win32.Alina.3.4.B']
 malware_extension: '.zip'
 
 # Log Level
