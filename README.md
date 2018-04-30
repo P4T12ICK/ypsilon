@@ -39,8 +39,9 @@ More information about installation and configuration of these tools can be foun
 ## How to Use
 The Ypsilon project consists of an Ansible playbook, which is executed by the following command:
 ```shell
-test
+ansible-playbook -i production -u [user] playbooks/use_case_testing.yml --ask-pass --ask-become-pass
 ```
+For more details about the arguments, have a look into to the Ansible documentation.
 
 # Credits
 This is a private project completely developed by Patrick Bareiss with feedback by colleagues and friends.
