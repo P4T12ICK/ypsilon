@@ -26,14 +26,14 @@ The configuration of the tools is described in the wiki.
 
 ## Installation
 The following tools need to be installed and configured:
-- Ansible Configutation
-- VirtualBox Configuration
-- Cuckoo Configuration
-- Sigma Configuration
-- Splunk Configuration
-- TexLive Configuration
+- [Ansible](https://github.com/P4T12ICK/ypsilon/wiki/Configuration-Ansible)
+- [VirtualBox](https://github.com/P4T12ICK/ypsilon/wiki/Configuration-VirtualBox)
+- [Cuckoo](https://github.com/P4T12ICK/ypsilon/wiki/Configuration-Cuckoo)
+- [Sigma](https://github.com/P4T12ICK/ypsilon/wiki/Configuration-Sigma)
+- [Splunk](https://github.com/P4T12ICK/ypsilon/wiki/Configuration-Splunk)
+- [TexLive](https://github.com/P4T12ICK/ypsilon/wiki/Configuration-TexLive)
 
-More information about installation and configuration of these tools can be found in the wiki.
+More information about installation and configuration of these tools can be found in the [wiki](https://github.com/P4T12ICK/ypsilon/wiki).
 
 
 ## How to Use
