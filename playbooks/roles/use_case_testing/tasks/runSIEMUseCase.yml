@@ -28,7 +28,7 @@
     msg: '{% for item in rule["fields"] %}&rf={{item}}{% endfor %}'
   when:
     - log_level == 'debug'
-    - sigma_target == 'splunk'
+    - SIEM_target == 'splunk'
 
 - name: Run SIEM Use Case in Splunk with REST API
   uri:
@@ -41,14 +41,14 @@
     headers:
       Content-Type: "application/x-www-form-urlencoded"
   register: SID_output
-  when: sigma_target == 'splunk' 
+  when: SIEM_target == 'splunk' 
 
 - name: Debug SIEM use case reponse 
   debug:
     msg: "{{ SID_output }}"
   when:
     - log_level == 'debug'
-    - sigma_target == 'splunk'
+    - SIEM_target == 'splunk'
 
 - name: Wait for the splunk search to finish
   pause: seconds=30
@@ -64,14 +64,14 @@
     headers:
       Content-Type: "application/x-www-form-urlencoded"
   register: SIEM_output
-  when: sigma_target == 'splunk'
+  when: SIEM_target == 'splunk'
 
 - name: Debug SIEM use case reponse 
   debug:
     msg: "{{ SIEM_output }}"
   when:
     - log_level == 'debug'
-    - sigma_target == 'splunk'
+    - SIEM_target == 'splunk'
 
 - name: Store result in log file
   copy:
@@ -79,7 +79,7 @@
     dest: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/{{ malware }}/SIEM_results.log'
   when: 
     - SIEM_output.content_length != "0"
-    - sigma_target == 'splunk'
+    - SIEM_target == 'splunk'
 
 - name: Store result in log file
   copy:
@@ -87,6 +87,6 @@
     dest: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/{{ malware }}/SIEM_results.log'
   when: 
     - SIEM_output.content_length == "0"
-    - sigma_target == 'splunk'
+    - SIEM_target == 'splunk'
 
 ...

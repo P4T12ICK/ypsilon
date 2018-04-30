@@ -19,7 +19,7 @@
 # This playbook converts a Sigma Use Case into a SIEM Use Case
 
 - name: Convert Sigma Use Case into a SIEM Use Case
-  shell: sigmac {{ sigma_rule_path }} -c {{ sigma_converter_path }} --target {{ sigma_target }} 
+  shell: sigmac {{ sigma_rule_path }} -c {{ sigma_converter_path }} --target {{ SIEM_target }} 
   register: SIEM_search
   become: true
 

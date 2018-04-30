@@ -5,27 +5,24 @@
 anisble_user: 'patrick'
 
 # Ypsilon path
-ypsilon_path: '/home/patrick/projects/ansible/use_case_testing/'
+ypsilon_path: '/home/patrick/projects/ypsilon/'
 
 # Use Case Test report folder
 path_to_report_folder: '/home/patrick/tmp/test_reports/' 
 
-
-# Sigma target:
-sigma_target: 'splunk'
-
 # Sigma Rule 
 sigma_rule_name: 'MITRE_persistence_registry_run_keys'
-sigma_rule_path: '/home/patrick/projects/ansible/use_case_testing/sigma/rules/MITRE_persistence_registry_run_keys.yml' 
+sigma_rule_path: '/home/patrick/projects/ypsilon/sigma/rules/MITRE_persistence_registry_run_keys.yml' 
 
 # Sigma Converter Config
-sigma_converter_path: '/home/patrick/projects/ansible/use_case_testing/sigma/converter/splunk-windows-sysmon.yml'
+sigma_converter_path: '/home/patrick/projects/ypsilon/sigma/converter/splunk-windows-sysmon.yml'
 
 # Use Case Target
 SIEM_target: 'splunk'
 target_ip_address: '192.168.56.11'
 
 # VM
+vm_name: 'splunk'
 snapshot: 'splunk_prepared'
 
 # malware
