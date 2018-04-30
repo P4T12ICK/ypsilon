@@ -30,7 +30,7 @@
   replace:
     path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
     regexp: '\[\[SIEM\]\]'
-    replace: '{{ sigma_target }}'
+    replace: '{{ SIEM_target }}'
     backup: no
 
 - name: Search and Replace title

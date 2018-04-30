@@ -19,8 +19,8 @@
 # This playbook stopps the VM.
 
 - name: Shutdown splunk vm instance 
-  shell: VBoxManage controlvm splunk poweroff
-  when: sigma_target == 'splunk' 
+  shell: VBoxManage controlvm {{ vm_name }} poweroff
+  when: SIEM_target == 'splunk' 
 
 
 ...

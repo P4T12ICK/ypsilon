@@ -19,28 +19,27 @@
 # This playbook revert the configured snapshot
 
 - name: revert to snapshot {{ snapshot }}
-  shell: VBoxManage snapshot splunk restore {{ snapshot }}
+  shell: VBoxManage snapshot {{ vm_name }} restore {{ snapshot }}
   register: revert_snapshot_output  
-  when: sigma_target == 'splunk' 
+  when: SIEM_target == 'splunk' 
 
 - name: Debug revert snapshot output
   debug:
     msg: "{{ revert_snapshot_output.stdout }}"
   when:
     - log_level == 'debug'
-    - sigma_target == 'splunk'
+    - SIEM_target == 'splunk'
 
 - name: start VM from snapshot
-  shell: VBoxManage startvm splunk --type headless
+  shell: VBoxManage startvm {{ vm_name }} --type headless
   register: start_VM_output
-  when: sigma_target == 'splunk' 
+  when: SIEM_target == 'splunk' 
 
 - name: Debug start VM snapshot output
   debug:
     msg: "{{ start_VM_output.stdout }}"
   when:
     - log_level == 'debug'
-    - sigma_target == 'splunk'
-  
+    - SIEM_target == 'splunk'
 
 ...
