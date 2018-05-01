@@ -23,9 +23,9 @@
     file: '{{ sigma_rule_path }}'
     name: rule
 
-- name: Debug required fields for search
+- name: Debug show Sigma rule
   debug:
-    msg: '{% for item in rule["fields"] %}&rf={{item}}{% endfor %}'
+    msg: '{{ rule }}'
   when:
     - log_level == 'debug'
     - SIEM_target == 'splunk'
@@ -34,7 +34,7 @@
   uri:
     url: 'https://{{ target_ip_address }}:8089/services/search/jobs'
     method: POST
-    body: 'search=search {{ SIEM_search.stdout }}{% for item in rule["fields"] %}&rf={{item}}{% endfor %}'
+    body: 'search=search {{ SIEM_search.stdout }} | stats count by {{rule["fields"]|join(", ")}}' # {% for item in rule["fields"] %}&rf={{item}}{% endfor %}'
     return_content: yes
     validate_certs: no
     status_code: 201
@@ -73,20 +73,25 @@
     - log_level == 'debug'
     - SIEM_target == 'splunk'
 
-- name: Store result in log file
-  copy:
-    content: '{{ SIEM_output.content }}'
-    dest: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/{{ malware }}/SIEM_results.log'
+- name: Save result in reporting.log Malware
+  lineinfile:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/reporting.log'
+    line: "Malware: {{ malware }} \n"
   when: 
-    - SIEM_output.content_length != "0"
     - SIEM_target == 'splunk'
 
-- name: Store result in log file
-  copy:
-    content: 'no results'
-    dest: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/{{ malware }}/SIEM_results.log'
+- name: Save result in reporting.log Logs
+  lineinfile:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/reporting.log'
+    line: "{% for dict_item in SIEM_output.json.results %}{% for key, value in dict_item.items() %}{{key}}: {{value}} \n {% endfor %} {% endfor %}"
   when: 
-    - SIEM_output.content_length == "0"
+    - SIEM_target == 'splunk'
+
+- name: Save result in reporting.log Separator
+  lineinfile:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/reporting.log'
+    line: "-------------------------- \n"
+  when: 
     - SIEM_target == 'splunk'
 
 ...

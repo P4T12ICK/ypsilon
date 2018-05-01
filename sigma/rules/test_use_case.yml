@@ -9,13 +9,9 @@ detection:
     selection:
         EventID: 
             - 111
-    condition: selection | count(EventID) by ComputerName > 0
+    condition: selection
 fields:
     - EventID
     - ComputerName
     - User
-    - Image
-    - TargetFilename
-falsepositives:
-    - valid company software
 

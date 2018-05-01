@@ -30,6 +30,10 @@ malware_path: '/home/patrick/Downloads/malware/'
 malware_array: ['Win32.Lephic','Win32.Alina.3.4.B']
 malware_extension: '.zip'
 
+# reporting
+report_author: 'Patrick Bareiss'
+
+
 # Log Level
 log_level: 'debug'
 
