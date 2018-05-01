@@ -16,21 +16,11 @@
 # along with Ypsilon.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-# combined tasks
+# This playbook creates the reporting.log
 
-- import_tasks: createSubFolder.yml
-- import_tasks: generateUseCase.yml
-- import_tasks: revertSnapshot.yml
-- import_tasks: pausePlaybook.yml
-- import_tasks: startCuckoo.yml
-- import_tasks: submitMalware.yml
-- import_tasks: pausePlaybook2.yml 
-- import_tasks: runSIEMUseCase.yml
-- import_tasks: pausePlaybook3.yml 
-- import_tasks: stopCuckoo.yml 
-- import_tasks: stopVM.yml
-#- import_tasks: createReport.yml
+- name: Create reporting.log 
+  copy:
+    content: "Auto generated \n---------------------"
+    dest: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/reporting.log'
 
-... 
-
-
+...

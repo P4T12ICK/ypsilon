@@ -26,6 +26,13 @@
     owner: '{{ ansible_user }}'
     group: '{{ ansible_user }}'
 
+- name: Search and Replace Report Author
+  replace:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    regexp: '\[\[report_author\]\]'
+    replace: '{{ report_author }}'
+    backup: no
+
 - name: Search and Replace SIEM
   replace:
     path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
