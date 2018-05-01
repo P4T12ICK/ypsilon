@@ -16,22 +16,14 @@
 # along with Ypsilon.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
-# main task
+# This playbook creates the report
 
-- include_tasks: createMainFolder.yml
+- name: Copy template tex file
+  copy:
+    src: '{{ ypsilon_path }}reporting/template.tex'
+    dest: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    remote_src: yes
+    owner: '{{ ansible_user }}'
+    group: '{{ ansible_user }}'
 
-- include_tasks: createFolder.yml
-
-- include_tasks: storeReportingLog.yml
-
-- include_tasks: prepareReport.yml
-
-- include_tasks: "combinedTasks.yml malware={{ malware_var }}"
-  with_items: "{{ malware_array }}"
-  loop_control:
-    loop_var: malware_var
-
-- import_tasks: createReport.yml
-... 
-
-
+...

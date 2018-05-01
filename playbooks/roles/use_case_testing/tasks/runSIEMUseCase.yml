@@ -94,4 +94,12 @@
   when: 
     - SIEM_target == 'splunk'
 
+- name: Store results in LaTex File
+  lineinfile:
+    path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
+    line: '{{ "\subsection{Malware" }}{{ malware }}{{ "}" }}{% for dict_item in SIEM_output.json.results %}{% for key, value in dict_item.items() %}{{key}}: \verb|{{value}}| {{ "\\" }} {% endfor %} {% endfor %}'
+    insertbefore: '%Logging'
+  when: 
+    - SIEM_target == 'splunk'
+
 ...

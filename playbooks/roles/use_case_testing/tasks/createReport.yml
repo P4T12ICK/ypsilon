@@ -18,14 +18,6 @@
 ---
 # This playbook creates the report
 
-- name: Copy template tex file
-  copy:
-    src: '{{ ypsilon_path }}reporting/template.tex'
-    dest: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
-    remote_src: yes
-    owner: '{{ ansible_user }}'
-    group: '{{ ansible_user }}'
-
 - name: Search and Replace Report Author
   replace:
     path: '{{ path_to_report_folder }}{{ current_timestamp.stdout }}_Use_Case_Test/Use_Case_{{ sigma_rule_name }}/report.tex'
